@@ -1,12 +1,12 @@
 package org.jrenner.learngl.utils
 
 import com.badlogic.gdx.math.Vector3
-import org.jrenner.learngl.cube.CubeDataGrid
-import org.jrenner.learngl.Direction
 import com.badlogic.gdx.utils.StringBuilder
-import org.jrenner.learngl.gameworld.World
+import org.jrenner.learngl.Direction
+import org.jrenner.learngl.cube.CubeDataGrid
 import org.jrenner.learngl.gameworld.CubeData
 import org.jrenner.learngl.gameworld.CubeType
+import org.jrenner.learngl.gameworld.World
 import org.jrenner.learngl.hiddenFacesEnabled
 import org.jrenner.learngl.world
 

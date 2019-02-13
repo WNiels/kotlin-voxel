@@ -1,23 +1,18 @@
 package org.jrenner.learngl.light
 
-import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.graphics.Color
-import kotlin.properties.Delegates
-import org.jrenner.learngl.view
-import com.badlogic.gdx.utils.GdxRuntimeException
-import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder
-import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute
-import com.badlogic.gdx.graphics.g3d.Material
 import com.badlogic.gdx.graphics.VertexAttributes.Usage
-import com.badlogic.gdx.graphics.g3d.ModelInstance
+import com.badlogic.gdx.graphics.g3d.Material
 import com.badlogic.gdx.graphics.g3d.Model
-import org.jrenner.learngl.utils.r
-import org.jrenner.learngl.world
-import org.jrenner.learngl.TimedIntervalTask
+import com.badlogic.gdx.graphics.g3d.ModelInstance
+import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute
+import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder
 import com.badlogic.gdx.math.MathUtils
-import com.badlogic.gdx.math.Vector2
-import org.jrenner.learngl.lights
-import org.jrenner.learngl.utils.fmt
+import com.badlogic.gdx.math.Vector3
+import org.jrenner.learngl.TimedIntervalTask
+import org.jrenner.learngl.utils.r
+import org.jrenner.learngl.view
+import org.jrenner.learngl.world
 
 class PointLight {
 

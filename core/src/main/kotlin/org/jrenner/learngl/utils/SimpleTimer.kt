@@ -1,7 +1,7 @@
 package org.jrenner.learngl.utils
 
-import com.badlogic.gdx.utils.TimeUtils
 import com.badlogic.gdx.utils.GdxRuntimeException
+import com.badlogic.gdx.utils.TimeUtils
 
 class SimpleTimer(val name: String) {
     var total = 0L

@@ -1,16 +1,15 @@
 package org.jrenner.learngl
 
 import com.badlogic.gdx.assets.AssetManager
-import com.badlogic.gdx.scenes.scene2d.ui.Skin
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle
-import com.badlogic.gdx.graphics.Pixmap
-import com.badlogic.gdx.math.MathUtils
-import com.badlogic.gdx.graphics.Texture
-import kotlin.properties.Delegates
+import com.badlogic.gdx.assets.loaders.TextureLoader.TextureParameter
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.Pixmap
+import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.Texture.TextureFilter
 import com.badlogic.gdx.graphics.Texture.TextureWrap
-import com.badlogic.gdx.assets.loaders.TextureLoader.TextureParameter
+import com.badlogic.gdx.math.MathUtils
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle
+import com.badlogic.gdx.scenes.scene2d.ui.Skin
 
 class Assets {
     val manager = AssetManager()
@@ -27,8 +26,8 @@ class Assets {
         fun loadTex(path: String) = manager.load(texturePath + path, Texture::class.java, texParam)
 
         arrayOf(
-                "dirt.png"
-                //"grass.png"
+                "dirt.png",
+                "grass.png"
         ).forEach {
             loadTex(it)
         }

@@ -1,27 +1,27 @@
 package org.jrenner.learngl
 
 import com.badlogic.gdx.ApplicationAdapter
-import com.badlogic.gdx.utils.TimeUtils
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.FPSLogger
-import kotlin.properties.Delegates
-import com.badlogic.gdx.math.MathUtils
-import com.badlogic.gdx.utils.Array as Arr
-import com.badlogic.gdx.graphics.profiling.GLProfiler
-import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.graphics.Color
-import org.jrenner.learngl.gameworld.Chunk
+import com.badlogic.gdx.graphics.FPSLogger
+import com.badlogic.gdx.graphics.profiling.GLProfiler
+import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector3
-import org.jrenner.learngl.light.Lights
+import com.badlogic.gdx.scenes.scene2d.ui.Skin
+import com.badlogic.gdx.utils.TimeUtils
 import org.jrenner.learngl.cube.CubeDataGrid
-import org.jrenner.learngl.input.GameInput
+import org.jrenner.learngl.gameworld.Chunk
 import org.jrenner.learngl.gameworld.World
+import org.jrenner.learngl.input.GameInput
+import org.jrenner.learngl.light.Lights
+import kotlin.properties.Delegates
+import com.badlogic.gdx.utils.Array as Arr
 
 class Main : ApplicationAdapter() {
     companion object {
-        public val mainWorld: World get() = world // for easier Java interop
-        public val mainChunkPool: DebugPool<Chunk> get() = chunkPool
-        public val mainCDGPool: DebugPool<CubeDataGrid> get() = cdgPool
+        val mainWorld: World get() = world // for easier Java interop
+        val mainChunkPool: DebugPool<Chunk> get() = chunkPool
+        val mainCDGPool: DebugPool<CubeDataGrid> get() = cdgPool
 
     }
 
@@ -44,9 +44,9 @@ class Main : ApplicationAdapter() {
         lights = Lights()
     }
 
-    val viewResetter = TimedIntervalTask(1.0f, {
+    val viewResetter = TimedIntervalTask(1.0f) {
         resetViewRequested = true
-    })
+    }
 
     override fun render() {
         /*if (frame % 120 == 0L) {
@@ -73,7 +73,7 @@ class Main : ApplicationAdapter() {
             }
             println("view reset")
         }
-        val dt = Gdx.graphics.getDeltaTime()
+        val dt = Gdx.graphics.deltaTime
         frameTimes[frameTimeIdx++] = dt
         world.update(dt)
         frame++
@@ -124,8 +124,8 @@ var lights: Lights by Delegates.notNull()
 
 var frame = 0L
 
-val screenWidth: Int get() = Gdx.graphics.getWidth()
-val screenHeight: Int get() = Gdx.graphics.getHeight()
+val screenWidth: Int get() = Gdx.graphics.width
+val screenHeight: Int get() = Gdx.graphics.height
 val screenRatio: Float get() = screenWidth / 1080f
 
 val startTime = TimeUtils.millis()

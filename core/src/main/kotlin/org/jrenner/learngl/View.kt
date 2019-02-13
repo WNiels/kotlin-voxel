@@ -1,25 +1,22 @@
 package org.jrenner.learngl
 
-import com.badlogic.gdx.graphics.PerspectiveCamera
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.GL20
+import com.badlogic.gdx.graphics.PerspectiveCamera
 import com.badlogic.gdx.graphics.g3d.ModelBatch
-import com.badlogic.gdx.utils.Array as Arr
-import com.badlogic.gdx.math.Quaternion
-import com.badlogic.gdx.math.Vector3
-import kotlin.properties.Delegates
 import com.badlogic.gdx.graphics.g3d.utils.FirstPersonCameraController
-import com.badlogic.gdx.utils.GdxRuntimeException
 import com.badlogic.gdx.graphics.glutils.ShaderProgram
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType
-import com.badlogic.gdx.math.Matrix4
-import org.jrenner.learngl.cube.CubeDataGrid
 import com.badlogic.gdx.math.MathUtils
+import com.badlogic.gdx.math.Matrix4
+import com.badlogic.gdx.math.Quaternion
+import com.badlogic.gdx.math.Vector3
+import com.badlogic.gdx.utils.GdxRuntimeException
+import org.jrenner.learngl.cube.CubeDataGrid
 import org.jrenner.learngl.gameworld.Chunk
-import com.badlogic.gdx.math.Frustum
-import org.jrenner.learngl.gameworld.World
+import com.badlogic.gdx.utils.Array as Arr
 
 class View {
     companion object {
@@ -27,14 +24,15 @@ class View {
             set(d) {
                 field = MathUtils.clamp(d, 20f, 1000f)
             }
-        val WALKING_MAX_VELOCITY = 5f
-        val FLYING_MAX_VELOCITY = 30f
+        const val WALKING_MAX_VELOCITY = 5f
+        const val FLYING_MAX_VELOCITY = 30f
+        const val FACE_HEIGHT = 3f
 
     }
     val gl = Gdx.gl!!
     val camera = PerspectiveCamera(67f, screenWidth.toFloat(), screenHeight.toFloat())
-    var walkingEnabled = false
-    val fogColor = Color(0.4f, 0.4f, 0.45f, 1.0f) // alpha is fog intensity
+    var walkingEnabled = true
+    val fogColor = Color(0.4f, 0.4f, 0.45f, .0f) // alpha is fog intensity
     //val fogColor = Color.valueOf("9CD2FF")
     val camControl: FirstPersonCameraController
     init {
@@ -42,7 +40,7 @@ class View {
         camera.near = 0.1f
         camera.far = 1500f
         camControl = FirstPersonCameraController(camera)
-        camControl.setVelocity(FLYING_MAX_VELOCITY)
+        camControl.setVelocity(WALKING_MAX_VELOCITY)
     }
 
     // begin debug section
@@ -66,8 +64,8 @@ class View {
         val vert = getShader("shader/custom.vertex.glsl")
         val frag = getShader("shader/custom.fragment.glsl")
         shader = ShaderProgram(vert, frag)
-        val log = shader.getLog()
-        if (!shader.isCompiled()) {
+        val log = shader.log
+        if (!shader.isCompiled) {
             println("SHADER ERROR:\n$log}")
             throw GdxRuntimeException("SHADER DID NOT COMPILE, SEE SHADER LOG ABOVE")
         } else {
@@ -95,16 +93,18 @@ class View {
         val pos = camera.position
         //val elev = world.getElevation(pos.x, pos.z).toFloat() + 2f
         val sz = 1f
-        val elev = world.getBoundingBoxElevation(pos.x - sz/2f, pos.z - sz/2f, sz, sz).toFloat() + 2f
+        val elev = world.getBoundingBoxElevation(pos.x - sz / 2f, pos.z - sz / 2f, sz, sz).toFloat() + FACE_HEIGHT
         val elevDiff = elev - pos.y
-        if (Math.abs(elevDiff) <= 0.1f) {
-            pos.y = elev
-            fallSpeed = 0f
-        } else if (elevDiff > 0) {
-            pos.y += 0.2f
-        } else {
-            fallSpeed += 0.01f
-            pos.y -= fallSpeed
+        when {
+            Math.abs(elevDiff) <= 0.1f -> {
+                pos.y = elev
+                fallSpeed = 0f
+            }
+            elevDiff > 0 -> pos.y += 0.2f
+            else -> {
+                fallSpeed += 0.01f
+                pos.y -= fallSpeed
+            }
         }
     }
 
@@ -122,8 +122,8 @@ class View {
         }
 
         gl.glEnable(GL20.GL_DEPTH_TEST)
-        gl.glEnable(GL20.GL_BLEND);
-        gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        gl.glEnable(GL20.GL_BLEND)
+        gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA)
 
         gl.glEnable(GL20.GL_CULL_FACE)
         gl.glCullFace(GL20.GL_BACK)
@@ -166,8 +166,6 @@ class View {
         try {
             shader.begin()
             lights.setUniforms()
-            //assets.grassTexture.bind()
-            assets.dirtTexture.bind()
             shader.setUniformMatrix(projTransLocation, camera.combined)
             //shader.setUniformMatrix(viewMatrixLocation, camera.view)
             normalMatrix.set(camera.combined.inv().tra())
@@ -179,7 +177,8 @@ class View {
             shader.setUniformf(fogColorLocation, fogColor)
 
             // Grass
-            //assets.grassTexture.bind()
+            assets.grassTexture.bind()
+            assets.dirtTexture.bind()
             chunksRendered = 0
             for (chunk in world.chunks) {
                 if (chunk.chunkMesh.vertexCount != 0 && chunk.inFrustum()) {
@@ -206,8 +205,8 @@ class View {
 
     fun drawChunkBoundingBoxes() {
         shapes.begin(ShapeType.Line)
-        shapes.setProjectionMatrix(camera.combined)
-        shapes.setColor(Color.GREEN)
+        shapes.projectionMatrix = camera.combined
+        shapes.color = Color.GREEN
         for (chunk in world.chunks) {
             val o = chunk.dataGrid.origin
             val w = CubeDataGrid.width.toFloat()
@@ -221,16 +220,16 @@ class View {
     fun drawXYZCoords() {
         val o = tmp2.set(0f, -10f, 0f)
         val n = 5f
-        shapes.setProjectionMatrix(camera.combined)
+        shapes.projectionMatrix = camera.combined
         shapes.begin(ShapeType.Line)
         // x
-        shapes.setColor(Color.BLUE)
+        shapes.color = Color.BLUE
         shapes.line(o, tmp.set(n, 0f, 0f).add(o))
         // y
-        shapes.setColor(Color.GREEN)
+        shapes.color = Color.GREEN
         shapes.line(o, tmp.set(0f, n, 0f).add(o))
         // z
-        shapes.setColor(Color.RED)
+        shapes.color = Color.RED
         shapes.line(o, tmp.set(0f, 0f, n).add(o))
         shapes.end()
 
@@ -242,9 +241,9 @@ class View {
     }
 
     fun drawFrameTimes() {
-        shapes.setProjectionMatrix(mtx)
+        shapes.projectionMatrix = mtx
         shapes.begin(ShapeType.Line)
-        shapes.setColor(Color.GREEN)
+        shapes.color = Color.GREEN
         val mult = 300f
         val slow = 1 / 45f
         val verySlow = 1 / 30f
@@ -258,7 +257,7 @@ class View {
                 time >= slow -> Color.YELLOW
                 else -> Color.GREEN
             }
-            shapes.setColor(col)
+            shapes.color = col
             shapes.line(0f, i.toFloat(), time * mult, i.toFloat())
         }
         shapes.end()

@@ -1,21 +1,21 @@
 package org.jrenner.learngl.test
 
-import org.junit.Test
-import org.junit.Assert.*
-import org.jrenner.learngl.cube.CubeDataGrid
-import com.badlogic.gdx.utils.Array as Arr
-import com.badlogic.gdx.math.Vector3
-import org.jrenner.learngl.utils.IntVector3
 import com.badlogic.gdx.math.MathUtils
+import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.utils.GdxRuntimeException
 import com.badlogic.gdx.utils.ObjectSet
+import org.jrenner.learngl.cube.CubeDataGrid
 import org.jrenner.learngl.gameworld.Chunk
 import org.jrenner.learngl.gameworld.CubeData
 import org.jrenner.learngl.gameworld.CubeType
 import org.jrenner.learngl.gameworld.World
+import org.jrenner.learngl.utils.IntVector3
 import org.jrenner.learngl.utils.calculateHiddenFaces
 import org.jrenner.learngl.utils.threeIntegerHashCode
 import org.jrenner.learngl.world
+import org.junit.Assert.*
+import org.junit.Test
+import com.badlogic.gdx.utils.Array as Arr
 
 
 class CubeDataGridTest {

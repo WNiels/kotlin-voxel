@@ -1,12 +1,11 @@
 package org.jrenner.learngl
 
-import com.badlogic.gdx.scenes.scene2d.Stage
-import com.badlogic.gdx.scenes.scene2d.ui.Table
-import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.scenes.scene2d.Actor
+import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
-import com.badlogic.gdx.utils.StringBuilder
 import org.jrenner.RenStringBuilder
 import org.jrenner.learngl.utils.plus
 
@@ -44,8 +43,8 @@ class HUD {
     fun update(dt: Float) {
         if (isReadyForUpdate()) {
             sb.delete(0, sb.sbLength())
-            sb + "FPS: " + Gdx.graphics.getFramesPerSecond().toString()
-            sb + "\nMemory\n\tJava: ${Gdx.app.getJavaHeap() / 1000000} MB\n\tNative: ${Gdx.app.getNativeHeap() / 1000000} MB"
+            sb + "FPS: " + Gdx.graphics.framesPerSecond.toString()
+            sb + "\nMemory\n\tJava: ${Gdx.app.javaHeap / 1000000} MB\n\tNative: ${Gdx.app.nativeHeap / 1000000} MB"
             sb + "\nChunks: ${world.chunks.size}, Rendered: ${view.chunksRendered}"
             sb + "\nChunkQueue: ${world.chunkCreationQueue.size}"
             val c = view.camera.position
@@ -53,7 +52,7 @@ class HUD {
             val camElev = world.getElevation(c.x, c.z)
             sb + "\nCamera: %.1f, %.1f %.1f\n\tAltitude above ground: $camElev".format(c.x, c.y, c.z)
             val moveMode = if (view.walkingEnabled) "Walking" else "Flying"
-            sb + "\nMovement mode: ${moveMode}"
+            sb + "\nMovement mode: $moveMode"
             sb + "\nView Distance: ${View.maxViewDist}"
             sb + "\nWARNING: \nHigh view distances require\nexponentially large amounts of memory"
             sb + "\n\nCONTROLS:\n\tW, A, S, D to move\n\tClick and hold mouse to look around\n\t- and + to change view distance"

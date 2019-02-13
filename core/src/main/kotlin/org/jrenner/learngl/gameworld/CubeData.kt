@@ -1,20 +1,21 @@
 package org.jrenner.learngl.gameworld
 
-import com.badlogic.gdx.utils.Array as Arr
 import com.badlogic.gdx.math.Vector3
 import org.jrenner.learngl.Direction
+import com.badlogic.gdx.utils.Array as Arr
 
 
 class CubeData {
     companion object {
         private val tmp = Vector3()
     }
-    public val xf: Float get() = x.toFloat()
-    public val yf: Float get() = y.toFloat()
-    public val zf: Float get() = z.toFloat()
-    public var x: Short = 0
-    public var y: Short = 0
-    public var z: Short = 0
+
+    val xf: Float get() = x.toFloat()
+    val yf: Float get() = y.toFloat()
+    val zf: Float get() = z.toFloat()
+    var x: Short = 0
+    var y: Short = 0
+    var z: Short = 0
     var cubeType = CubeType.Void
     var hiddenFaces: Int = 0
     val hiddenFacesCount: Int

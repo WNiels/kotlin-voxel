@@ -1,15 +1,15 @@
 package org.jrenner.learngl.gameworld
 
+import com.badlogic.gdx.math.Frustum
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector3
-import com.badlogic.gdx.utils.Array as Arr
-import org.jrenner.learngl.cube.CubeDataGrid
-import org.jrenner.learngl.View
-import org.jrenner.learngl.utils.threeIntegerHashCode
-import com.badlogic.gdx.math.Frustum
 import com.badlogic.gdx.utils.IntSet
+import org.jrenner.learngl.View
+import org.jrenner.learngl.cube.CubeDataGrid
 import org.jrenner.learngl.utils.inFrustum
+import org.jrenner.learngl.utils.threeIntegerHashCode
 import org.jrenner.learngl.world
+import com.badlogic.gdx.utils.Array as Arr
 
 /** updates chunks in the world on a separate Thread */
 class WorldUpdater(val wor: World): Runnable {
@@ -86,12 +86,12 @@ class WorldUpdater(val wor: World): Runnable {
             return
         }*/
         val camPos = tempCamPos
-        val loX = MathUtils.clamp(camPos.x - maxDist, 0f, world.width.toFloat());
-        val loY = MathUtils.clamp(camPos.y - maxDist, 0f, world.height.toFloat());
-        val loZ = MathUtils.clamp(camPos.z - maxDist, 0f, world.depth.toFloat());
-        val hiX = MathUtils.clamp(camPos.x + maxDist, 0f, world.width.toFloat());
-        val hiY = MathUtils.clamp(camPos.y + maxDist, 0f, world.height.toFloat());
-        val hiZ = MathUtils.clamp(camPos.z + maxDist, 0f, world.depth.toFloat());
+        val loX = MathUtils.clamp(camPos.x - maxDist, 0f, world.width.toFloat())
+        val loY = MathUtils.clamp(camPos.y - maxDist, 0f, world.height.toFloat())
+        val loZ = MathUtils.clamp(camPos.z - maxDist, 0f, world.depth.toFloat())
+        val hiX = MathUtils.clamp(camPos.x + maxDist, 0f, world.width.toFloat())
+        val hiY = MathUtils.clamp(camPos.y + maxDist, 0f, world.height.toFloat())
+        val hiZ = MathUtils.clamp(camPos.z + maxDist, 0f, world.depth.toFloat())
         val sz: Float = Chunk.chunkSizef
 
         fun createChunkIfNeeded(x: Float, y: Float, z: Float) {

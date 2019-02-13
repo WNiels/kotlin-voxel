@@ -1,14 +1,14 @@
 package org.jrenner.learngl.input
 
-import com.badlogic.gdx.InputAdapter
-import com.badlogic.gdx.graphics.g3d.utils.FirstPersonCameraController
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.InputMultiplexer
-import kotlin.properties.Delegates
-import org.jrenner.learngl.View
 import com.badlogic.gdx.Input.Keys
+import com.badlogic.gdx.InputAdapter
+import com.badlogic.gdx.InputMultiplexer
+import com.badlogic.gdx.graphics.g3d.utils.FirstPersonCameraController
+import org.jrenner.learngl.View
 import org.jrenner.learngl.main
 import org.jrenner.learngl.view
+import kotlin.properties.Delegates
 
 class GameInput {
     val input = Gdx.input!!
@@ -23,7 +23,7 @@ class GameInput {
 
     fun resetProcessors() {
         multi.clear()
-        input.setInputProcessor(multi)
+        input.inputProcessor = multi
         multi.addProcessor(proc)
         multi.addProcessor(camControl)
     }

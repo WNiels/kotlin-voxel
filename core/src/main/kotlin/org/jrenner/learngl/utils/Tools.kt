@@ -1,12 +1,8 @@
 package org.jrenner.learngl.utils
 
-import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Frustum
-import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.math.Vector3
-import com.badlogic.gdx.math.Plane
-import com.badlogic.gdx.math.Intersector
+import com.badlogic.gdx.math.MathUtils
 
 fun r(f: Float) = MathUtils.random(f)
 fun r(f1: Float, f2: Float) = MathUtils.random(f1, f2)
@@ -20,7 +16,7 @@ fun randomizeColor(color: Color, min: Float = 0.0f, max: Float = 1.0f): Color {
     return color
 }
 
-public fun threeIntegerHashCode(a: Int, b: Int, c: Int): Int {
+fun threeIntegerHashCode(a: Int, b: Int, c: Int): Int {
     // h = (a*P1 + b)*P2 + c
     val prime1 = 1013
     val prime2 = 7499

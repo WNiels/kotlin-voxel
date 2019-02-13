@@ -33,7 +33,7 @@ public class WorldChunkData {
 	}
 
 	/** workaround for bug in kotlin compiler
-	 * https://youtrack.jetbrains.com/issue/KT-6586
+     * TODO: https://youtrack.jetbrains.com/issue/KT-6586
 	 */
 	private int chunkSize() {
 		return Chunk.Companion.getChunkSize();

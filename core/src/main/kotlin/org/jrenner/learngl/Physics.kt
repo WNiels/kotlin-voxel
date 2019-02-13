@@ -1,10 +1,9 @@
 package org.jrenner.learngl
 
-import com.badlogic.gdx.math.Vector3
-import org.jrenner.learngl.gameworld.CubeData
-import com.badlogic.gdx.math.collision.Ray
 import com.badlogic.gdx.math.Intersector
+import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.math.collision.BoundingBox
+import com.badlogic.gdx.math.collision.Ray
 
 /** returns position correction needed */
 object Physics {

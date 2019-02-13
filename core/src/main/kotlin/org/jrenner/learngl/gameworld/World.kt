@@ -1,17 +1,17 @@
 package org.jrenner.learngl.gameworld
 
-import org.jrenner.learngl.cube.CubeDataGrid
-import com.badlogic.gdx.math.Vector3
-import com.badlogic.gdx.utils.Array as Arr
 import com.badlogic.gdx.math.MathUtils
-import com.badlogic.gdx.utils.ObjectSet
-import org.jrenner.learngl.cube.WorldChunkData
+import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.utils.DelayedRemovalArray
 import com.badlogic.gdx.utils.GdxRuntimeException
 import com.badlogic.gdx.utils.ObjectMap
+import com.badlogic.gdx.utils.ObjectSet
 import org.jrenner.learngl.*
+import org.jrenner.learngl.cube.CubeDataGrid
+import org.jrenner.learngl.cube.WorldChunkData
 import org.jrenner.learngl.utils.calculateHiddenFaces
 import org.jrenner.learngl.utils.threeIntegerHashCode
+import com.badlogic.gdx.utils.Array as Arr
 
 class World(val width: Int, val height: Int, val depth: Int) {
     
@@ -38,7 +38,12 @@ class World(val width: Int, val height: Int, val depth: Int) {
     val chunkCreationQueue = ObjectSet<CubeDataGrid>()
     val worldData = WorldChunkData(width, height, depth, this)
 
-    fun processCreationQueue() {
+    /**
+     * Processes the Chunk creation queue.
+     *
+     * Get's the chunk with the minimal distance to the camera, create and adds it to the World.
+     */
+    private fun processCreationQueue() {
         synchronized(this) {
             if (chunkCreationQueue.size == 0) return
             val cdg = chunkCreationQueue.minBy { it.center.dst2(view.camera.position) }!!
@@ -49,7 +54,12 @@ class World(val width: Int, val height: Int, val depth: Int) {
         }
     }
 
-    fun removeChunksOutOfViewRange() {
+    /**
+     * Processes the Chunk deletion queue.
+     *
+     * Removes chunks that are out of view range from World and disposes it.
+     */
+    private fun removeChunksOutOfViewRange() {
         synchronized(this) {
             chunks.begin()
             for (i in 0 until chunks.size) {
@@ -83,13 +93,13 @@ class World(val width: Int, val height: Int, val depth: Int) {
             chunk.update()
         }
     }
-    
-    fun initUpdater() {
+
+    private fun initUpdater() {
         if (!updatesEnabled) return
         if (updater == null) {
-            updater =WorldUpdater(this)
+            updater = WorldUpdater(this)
             val t = Thread(updater)
-            t.setName("WorldUpdater")
+            t.name = "WorldUpdater"
             t.start()
         }
     }
@@ -114,12 +124,12 @@ class World(val width: Int, val height: Int, val depth: Int) {
     }
 
     fun hasCubeAt(x: Float, y: Float, z: Float): Boolean {
-        if (!hasChunkAt(x, y, z)) {
-            return false
+        return if (!hasChunkAt(x, y, z)) {
+            false
         } else {
             val chunk = getChunkAt(x, y, z)
             if (chunk.dataGrid.hasCubeAt(x, y, z)) {
-                return true
+                true
             } else {
                 throw GdxRuntimeException("world.hasCubeAt($x, $y, $z), error: world has cube, but chunk doesn't!")
             }
@@ -145,6 +155,7 @@ class World(val width: Int, val height: Int, val depth: Int) {
         return false*/
     }
 
+    @Suppress("MemberVisibilityCanBePrivate")
     fun addChunk(chunk: Chunk) {
         chunks.add(chunk)
         chunkHashCodeMap.put(chunk.hashCode(), chunk)
@@ -236,13 +247,21 @@ class World(val width: Int, val height: Int, val depth: Int) {
         }
     }
 
+    /**
+     * Representing a single layer of SimplexNoise.
+     */
     class NoiseLayer(val freq: Float, val weight: Float) {
-        val elevations = Array(Chunk.chunkSize, { FloatArray(Chunk.chunkSize) })
+        val elevations = Array(Chunk.chunkSize) { FloatArray(Chunk.chunkSize) }
         fun generateNoise(originX: Float, originZ: Float) {
             SimplexNoise.generateSimplexNoise(originX.toInt(), originZ.toInt(), CubeDataGrid.width, CubeDataGrid.depth, freq, elevations)
         }
     }
 
+    /**
+     * Manages NoiseLayers's.
+     *
+     * Sum's up and returns noise for coordinates x, z.
+     */
     object NoiseLayerManager {
         val allLayers = Arr<NoiseLayer>()
 
@@ -264,7 +283,7 @@ class World(val width: Int, val height: Int, val depth: Int) {
 
         fun getNoise(x: Int, z: Int): Float {
             var noise = 0f
-            for (i in 0..allLayers.size-1) {
+            for (i in 0 until allLayers.size) {
                 val layer = allLayers[i]
                 noise += layer.elevations[x][z] * layer.weight
             }
@@ -272,6 +291,9 @@ class World(val width: Int, val height: Int, val depth: Int) {
         }
     }
 
+    /**
+     * Apply's noise information to cubes.
+     */
     fun applyWorldData(cdg: CubeDataGrid, wor: World) {
         //val start = TimeUtils.nanoTime()
         NoiseLayerManager.generateAllNoise(cdg)
@@ -281,8 +303,10 @@ class World(val width: Int, val height: Int, val depth: Int) {
             val elev = NoiseLayerManager.getNoise(x, z) * wor.height
             if (cube.yf > elev) {
                 cube.cubeType = CubeType.Void
-            } else {
+            } else if (cube.yf == elev) {
                 cube.cubeType = CubeType.Grass
+            } else {
+                cube.cubeType = CubeType.Dirt
             }
         }
         //val elapsed = TimeUtils.nanoTime() - start

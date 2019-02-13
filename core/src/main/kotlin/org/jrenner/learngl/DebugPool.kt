@@ -1,11 +1,9 @@
 package org.jrenner.learngl
 
-import com.badlogic.gdx.utils.Pool
 import com.badlogic.gdx.utils.GdxRuntimeException
-import com.badlogic.gdx.utils.Array as Arr
-import com.badlogic.gdx.utils.StringBuilder
+import com.badlogic.gdx.utils.Pool
 import org.jrenner.RenStringBuilder
-import kotlin.properties.Delegates
+import com.badlogic.gdx.utils.Array as Arr
 
 class DebugPool<T>(val name: String, val newObjFunc: () -> T, initialCapacity: Int = 16) : Pool<T>(initialCapacity) {
     companion object {
@@ -56,7 +54,7 @@ class DebugPool<T>(val name: String, val newObjFunc: () -> T, initialCapacity: I
     }
 
     fun debugInfo(): String {
-        return "[DebugPool: $name] created: $objectsCreated, obtained: $objectsObtained, freed: $objectsFreed, currently free: ${getFree()}"
+        return "[DebugPool: $name] created: $objectsCreated, obtained: $objectsObtained, freed: $objectsFreed, currently free: ${free}"
     }
 }
 

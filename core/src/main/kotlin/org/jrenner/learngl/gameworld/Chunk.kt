@@ -1,12 +1,12 @@
 package org.jrenner.learngl.gameworld
 
-import kotlin.properties.Delegates
+import org.jrenner.learngl.chunkPool
 import org.jrenner.learngl.cube.CubeDataGrid
 import org.jrenner.learngl.utils.refresh
-import org.jrenner.learngl.chunkPool
 import org.jrenner.learngl.view
+import kotlin.properties.Delegates
 
-class Chunk() {
+class Chunk {
     companion object {
         var chunkSize = 16
         var chunkSizef = chunkSize.toFloat()

@@ -1,16 +1,16 @@
 package org.jrenner.learngl.gameworld
 
 import com.badlogic.gdx.graphics.Mesh
-import com.badlogic.gdx.graphics.VertexAttributes.Usage
 import com.badlogic.gdx.graphics.VertexAttribute
+import com.badlogic.gdx.graphics.VertexAttributes.Usage
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.utils.GdxRuntimeException
-import org.jrenner.learngl.cube.CubeDataGrid
-import com.badlogic.gdx.math.Vector2
-import kotlin.properties.Delegates
 import org.jrenner.learngl.Direction
+import org.jrenner.learngl.cube.CubeDataGrid
+import kotlin.properties.Delegates
 
-class ChunkMesh() {
+class ChunkMesh {
     companion object {
         private val cubeRectData = RectData()
 
@@ -115,7 +115,7 @@ class ChunkMesh() {
             throw GdxRuntimeException("vertexCount ($vertexCount) != NUM_VERTS ($NUM_VERTS)")
         }*/
         started = false
-        mesh.setVertices(verts, 0, numFloats);
+        mesh.setVertices(verts, 0, numFloats)
         //mesh.updateVertices(0, verts, 0, numFloats)
     }
 
@@ -229,7 +229,7 @@ class ChunkMesh() {
     }
 }
 
-class RectData() {
+class RectData {
     val v00 = Vector3()
     val v10 = Vector3()
     val v01 = Vector3()

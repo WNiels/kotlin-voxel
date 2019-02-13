@@ -1,9 +1,9 @@
 package org.jrenner.learngl.light
-import com.badlogic.gdx.utils.Array as Arr
-import org.jrenner.learngl.view
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.utils.GdxRuntimeException
 import org.jrenner.learngl.utils.randomizeColor
+import org.jrenner.learngl.view
+import com.badlogic.gdx.utils.Array as Arr
 
 class Lights {
     val pointLights = Arr<PointLight>()
@@ -22,7 +22,7 @@ class Lights {
         val shader = view.shader
         ambientLoc = shader.getUniformLocation("u_ambientLight")
         if (ambientLoc == -1) throw GdxRuntimeException("couldn't get location for u_ambientLight from shader")
-        for (i in 0..pointLights.size - 1) {
+        for (i in 0 until pointLights.size) {
             val pl = pointLights[i]
             pl.posLoc = shader.getUniformLocation("u_pointLights[$i].pos")
             pl.colorLoc = shader.getUniformLocation("u_pointLights[$i].color")
@@ -45,16 +45,25 @@ class Lights {
 
     // CREATE LIGHTS
     init {
+        /*
+         * Camera attached light.
+         */
         val camLight = PointLight()
         pointLights.add(camLight)
         //pl.pos.set(0f, 0f, 0f)
         camLight.intensity = 10f
-        camLight.attachedToCamera = true
+        camLight.attachedToCamera = false
 
-        val intensity = 0.15f
+        /*
+         * General lighting.
+         */
+        val intensity = 0.9f
         dirLight.color.set(intensity, intensity, intensity, 1.0f)
         dirLight.direction.set(-.5f, -1f, -.5f).nor()
 
+        /*
+         * Some funny lights.
+         */
         for (n in 1..10) {
             val pl = PointLight()
             randomizeColor(pl.color, min = 0.3f, max = 1.0f)
