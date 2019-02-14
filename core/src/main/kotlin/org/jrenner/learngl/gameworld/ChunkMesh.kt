@@ -109,7 +109,7 @@ class ChunkMesh {
     private fun end() {
         if (!started) throw GdxRuntimeException("call start() first!")
 /*        if (cubesCreated != NUM_CUBES) {
-            throw GdxRuntimeException("cubes created (${cubesCreated}) is not equal to NUM_CUBES (${NUM_CUBES})")
+            throw GdxRuntimeException("blocks created (${cubesCreated}) is not equal to NUM_CUBES (${NUM_CUBES})")
         }*/
 /*        if (vertexCount != NUM_VERTS) {
             throw GdxRuntimeException("vertexCount ($vertexCount) != NUM_VERTS ($NUM_VERTS)")

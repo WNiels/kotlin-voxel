@@ -292,7 +292,7 @@ class World(val width: Int, val height: Int, val depth: Int) {
     }
 
     /**
-     * Apply's noise information to cubes.
+     * Apply's noise information to blocks.
      */
     fun applyWorldData(cdg: CubeDataGrid, wor: World) {
         //val start = TimeUtils.nanoTime()
@@ -301,12 +301,10 @@ class World(val width: Int, val height: Int, val depth: Int) {
             val x = (cube.xf - cdg.origin.x).toInt()
             val z = (cube.zf - cdg.origin.z).toInt()
             val elev = NoiseLayerManager.getNoise(x, z) * wor.height
-            if (cube.yf > elev) {
-                cube.cubeType = CubeType.Void
-            } else if (cube.yf == elev) {
-                cube.cubeType = CubeType.Grass
-            } else {
-                cube.cubeType = CubeType.Dirt
+            when {
+                cube.yf > elev -> cube.cubeType = CubeType.Void
+                cube.yf == elev -> cube.cubeType = CubeType.Grass
+                else -> cube.cubeType = CubeType.Dirt
             }
         }
         //val elapsed = TimeUtils.nanoTime() - start
